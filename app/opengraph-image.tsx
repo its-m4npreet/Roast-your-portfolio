@@ -37,6 +37,9 @@ export default function OpenGraphImage() {
 
         <div
           style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexWrap: 'wrap',
             fontSize: 78,
             lineHeight: 1.05,
             fontWeight: 800,
