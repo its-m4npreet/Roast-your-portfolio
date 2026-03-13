@@ -7,7 +7,7 @@ export default function Home() {
     <div className="min-h-screen">
       <Navbar />
       <Hero />
-      <div className="relative z-20 py-12 px-4">
+      <div className="relative z-20 py-12 px-4 bg-gray-50/70 dark:bg-black/40 transition-colors">
         <UrlInput />
       </div>
     </div>

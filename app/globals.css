@@ -99,3 +99,24 @@ html {
   outline: none;
 }
 
+/* Text selection colors */
+::selection {
+  background: rgba(249, 115, 22, 0.22);
+  color: #111827;
+}
+
+::-moz-selection {
+  background: rgba(249, 115, 22, 0.22);
+  color: #111827;
+}
+
+.dark ::selection {
+  background: rgba(249, 115, 22, 0.35);
+  color: #ffffff;
+}
+
+.dark ::-moz-selection {
+  background: rgba(249, 115, 22, 0.35);
+  color: #ffffff;
+}
+

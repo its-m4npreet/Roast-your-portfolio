@@ -88,13 +88,59 @@ export async function copyToClipboard(text) {
 }
 
 /**
+ * Build shareable result URL
+ * @returns {string} Shareable result URL
+ */
+export function getShareableResultUrl() {
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
+
+  const cleanBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  return cleanBase;
+}
+
+/**
  * Share result to social media
  * @param {Object} result - Roast result data
- * @returns {string} Share URL
+ * @returns {Object} Share links by platform
+ */
+export function generateShareLinks(result) {
+  const link = getShareableResultUrl();
+  const modeMap = {
+    roast: 'Roast Mode 😄',
+    recruiter: 'Recruiter Mode 💼',
+    brutal: 'Brutal Mode 💀',
+  };
+
+  const modeLabel = modeMap[result?.mode] || 'Roast Mode 😄';
+  const score = Number(result?.score) || 0;
+  const text = `🔥 Roastfolio Score: ${score}/100
+
+My portfolio just got roasted in ${modeLabel} mode.
+
+Think yours can survive? 👀
+
+Try it here:
+${link}`;
+
+  return {
+    link,
+    x: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
+    whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`,
+    reddit: `https://www.reddit.com/submit?url=${encodeURIComponent(link)}&title=${encodeURIComponent(`I got ${score}/100 on Roastfolio (${modeLabel})`)}`,
+  };
+}
+
+/**
+ * Backward-compatible single share URL (X)
+ * @param {Object} result - Roast result data
+ * @returns {string} Share URL for X
  */
 export function generateShareUrl(result) {
-  const text = `I got a ${result.score}/100 on my portfolio! 🔥 Check yours at ${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}`;
-  return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+  return generateShareLinks(result).x;
 }
 
 /**

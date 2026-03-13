@@ -45,7 +45,7 @@ function ResultContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
+      <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors">
         <Navbar />
         <div className="container mx-auto px-4 py-32">
           <SkeletonLoader />
@@ -56,7 +56,7 @@ function ResultContent() {
 
   if (error || !result) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
+      <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors">
         <Navbar />
         <div className="container mx-auto px-4 py-32 text-center">
           <motion.div
@@ -64,14 +64,14 @@ function ResultContent() {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-md mx-auto"
           >
-            <div className="text-6xl mb-4">😕</div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            <div className="text-6xl mb-6">😕</div>
+            <h1 className="text-3xl font-black tracking-tight text-gray-900 dark:text-white mb-4">
               Oops! Something went wrong
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mb-8">{error || 'Result not found'}</p>
+            <p className="text-gray-600 dark:text-white/50 text-sm tracking-wide font-light mb-8">{error || 'Result not found'}</p>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 rounded-xl text-white font-medium hover:shadow-lg hover:shadow-orange-500/50 transition-shadow"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 rounded-xl text-white text-xs font-black tracking-widest uppercase transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)]"
             >
               <ArrowLeft size={20} />
               Back to Home
@@ -83,7 +83,7 @@ function ResultContent() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
+    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors">
       <Navbar />
       <div className="container mx-auto px-4 py-32">
         <motion.div
@@ -93,7 +93,7 @@ function ResultContent() {
         >
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-gray-500 dark:text-white/30 hover:text-gray-900 dark:hover:text-white/80 transition-colors"
           >
             <ArrowLeft size={20} />
             Back to Home
@@ -110,7 +110,7 @@ function ResultContent() {
         >
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-pink-500 rounded-2xl text-white font-bold text-lg hover:shadow-2xl hover:shadow-orange-500/50 transition-all"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl border border-gray-300 dark:border-white/15 bg-white dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 text-gray-800 dark:text-white text-[11px] font-semibold tracking-[0.16em] uppercase transition-colors"
           >
             Roast Another Portfolio
           </Link>
@@ -123,7 +123,7 @@ function ResultContent() {
 export default function ResultPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black to-orange-900">
+      <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors">
         <Navbar />
         <div className="container mx-auto px-4 py-32">
           <SkeletonLoader />
