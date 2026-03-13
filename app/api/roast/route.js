@@ -3,6 +3,10 @@ import { scrapePortfolio, captureScreenshot } from '@/lib/scraper';
 import { generateRoast } from '@/lib/ai';
 import { prisma } from '@/lib/db';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function POST(request) {
   try {
     const { url, mode = 'roast' } = await request.json();

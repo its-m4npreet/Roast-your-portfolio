@@ -11,6 +11,26 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Roastfolio - Get Your Portfolio Roasted by AI",
   description: "Paste your portfolio URL and receive funny but useful feedback from AI. Choose from Roast Mode, Recruiter Mode, or Brutal Mode.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
+  openGraph: {
+    title: 'Roastfolio - Get Your Portfolio Roasted by AI',
+    description: 'AI feedback for portfolios in Roast, Recruiter, and Brutal modes.',
+    type: 'website',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Roastfolio preview image',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Roastfolio - Get Your Portfolio Roasted by AI',
+    description: 'AI feedback for portfolios in Roast, Recruiter, and Brutal modes.',
+    images: ['/opengraph-image'],
+  },
 };
 
 export default function RootLayout({
