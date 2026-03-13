@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate && puppeteer browsers install chrome"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.2",
