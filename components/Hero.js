@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function Hero() {
   return (
-    <div className="relative min-h-[92vh] md:min-h-[100vh] flex items-center justify-center overflow-hidden pt-24 md:pt-20">
+    <div className="relative min-h-[78vh] sm:min-h-[92vh] md:min-h-[100vh] flex items-center justify-center overflow-hidden pt-20 sm:pt-24 md:pt-20 pb-10 sm:pb-0">
       {/* Simple Background */}
       <div className="absolute inset-0 bg-gray-50 dark:bg-black/50">
         <div className="absolute inset-0 bg-grid-pattern opacity-10 dark:opacity-5"></div>
