@@ -64,7 +64,9 @@ export async function POST(request) {
       });
     } catch (dbError) {
       console.error('[API] Database error:', dbError.message);
-      throw new Error(`Database error: ${dbError.message}. Please ensure Prisma dev server is running.`);
+      throw new Error(
+        `Database error: ${dbError.message}. Ensure Prisma migrations are applied (e.g. \"prisma migrate deploy\") and DATABASE_URL points to the correct database.`
+      );
     }
 
     console.log('[API] Analysis complete:', result.id);
