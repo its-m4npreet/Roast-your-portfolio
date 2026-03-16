@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { scrapePortfolio, captureScreenshot } from '@/lib/scraper';
 import { generateRoast } from '@/lib/ai';
 import { prisma } from '@/lib/db';
+import { validatePortfolioUrl } from '@/utils/helpers';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -11,13 +12,20 @@ export async function POST(request) {
   try {
     const { url, mode = 'roast' } = await request.json();
 
+    const validation = validatePortfolioUrl(url);
+
     // Validate input
-    if (!url) {
+    if (!validation.isValid) {
       return NextResponse.json(
-        { error: 'URL is required' },
+        {
+          error: validation.reason,
+          code: validation.code,
+        },
         { status: 400 }
       );
     }
+
+    const cleanUrl = validation.normalizedUrl;
 
     // Validate mode
     const validModes = ['roast', 'recruiter', 'brutal'];
@@ -28,17 +36,17 @@ export async function POST(request) {
       );
     }
 
-    console.log(`[API] Starting analysis for ${url} in ${mode} mode`);
+    console.log(`[API] Starting analysis for ${cleanUrl} in ${mode} mode`);
 
     // Step 1: Scrape portfolio
     console.log('[API] Scraping portfolio...');
-    const portfolioData = await scrapePortfolio(url);
+    const portfolioData = await scrapePortfolio(cleanUrl);
 
     // Step 2: Capture screenshot
     console.log('[API] Capturing screenshot...');
     let screenshot = null;
     try {
-      screenshot = await captureScreenshot(url);
+      screenshot = await captureScreenshot(cleanUrl);
     } catch (error) {
       console.warn('[API] Screenshot capture failed:', error.message);
       // Continue without screenshot
@@ -54,7 +62,7 @@ export async function POST(request) {
     try {
       result = await prisma.roastResult.create({
         data: {
-          url,
+          url: cleanUrl,
           score: aiResponse.score,
           roast: aiResponse.roast,
           suggestion: aiResponse.suggestion,

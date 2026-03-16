@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Send, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { isValidUrl } from '@/utils/helpers';
+import { normalizeUrlInput, validatePortfolioUrl } from '@/utils/helpers';
 
 const modeOptions = [
   {
@@ -58,14 +58,16 @@ export default function UrlInput() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!url.trim()) {
-      toast.error('Please enter a URL');
+    const normalizedUrl = normalizeUrlInput(url);
+    const validation = validatePortfolioUrl(normalizedUrl);
+
+    if (!validation.isValid) {
+      toast.error(validation.reason);
       return;
     }
 
-    if (!isValidUrl(url)) {
-      toast.error('Please enter a valid URL');
-      return;
+    if (normalizedUrl !== url) {
+      setUrl(validation.normalizedUrl);
     }
 
     setLoading(true);
@@ -77,7 +79,7 @@ export default function UrlInput() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url, mode }),
+        body: JSON.stringify({ url: validation.normalizedUrl, mode }),
       });
 
       const data = await response.json();

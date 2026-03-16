@@ -13,6 +13,99 @@ export function isValidUrl(url) {
 }
 
 /**
+ * Normalize user URL input (e.g. adds https:// when protocol is missing)
+ * @param {string} input - Raw URL input
+ * @returns {string} Normalized URL-like string
+ */
+export function normalizeUrlInput(input) {
+  const value = String(input || '').trim();
+  if (!value) return '';
+
+  if (/^https?:\/\//i.test(value)) {
+    return value;
+  }
+
+  // If user pastes domain without protocol, default to https
+  if (/^[a-z0-9.-]+\.[a-z]{2,}(\/.*)?$/i.test(value)) {
+    return `https://${value}`;
+  }
+
+  return value;
+}
+
+/**
+ * Validate portfolio URL with clear error reasons
+ * @param {string} input - URL input
+ * @returns {{isValid: boolean, normalizedUrl: string, reason: string, code: string}}
+ */
+export function validatePortfolioUrl(input) {
+  const normalizedUrl = normalizeUrlInput(input);
+
+  if (!normalizedUrl) {
+    return {
+      isValid: false,
+      normalizedUrl: '',
+      reason: 'Please enter a URL',
+      code: 'EMPTY_URL',
+    };
+  }
+
+  let parsed;
+  try {
+    parsed = new URL(normalizedUrl);
+  } catch {
+    return {
+      isValid: false,
+      normalizedUrl,
+      reason: 'Invalid URL format. Example: https://yourportfolio.com',
+      code: 'INVALID_FORMAT',
+    };
+  }
+
+  if (!['http:', 'https:'].includes(parsed.protocol)) {
+    return {
+      isValid: false,
+      normalizedUrl,
+      reason: 'Only http and https URLs are supported',
+      code: 'INVALID_PROTOCOL',
+    };
+  }
+
+  if (!parsed.hostname || !parsed.hostname.includes('.')) {
+    return {
+      isValid: false,
+      normalizedUrl,
+      reason: 'Please enter a complete public domain (e.g. https://yourportfolio.com)',
+      code: 'INVALID_HOST',
+    };
+  }
+
+  // Prevent local/private targets
+  const host = parsed.hostname.toLowerCase();
+  const isLocalhost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
+  const isPrivateIPv4 =
+    /^10\./.test(host) ||
+    /^192\.168\./.test(host) ||
+    /^172\.(1[6-9]|2\d|3[0-1])\./.test(host);
+
+  if (isLocalhost || isPrivateIPv4) {
+    return {
+      isValid: false,
+      normalizedUrl,
+      reason: 'Local/private URLs are not allowed. Use a public portfolio URL.',
+      code: 'PRIVATE_HOST',
+    };
+  }
+
+  return {
+    isValid: true,
+    normalizedUrl: parsed.toString(),
+    reason: '',
+    code: 'OK',
+  };
+}
+
+/**
  * Format date to readable string
  * @param {Date|string} date - Date to format
  * @returns {string} Formatted date
